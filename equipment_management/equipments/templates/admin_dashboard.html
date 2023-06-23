@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Equipment Monitoring</title>
+    <style>
+        /* Reset some default styling */
+        body, h1, h2, h3, h4, h5, h6, p, ul, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Admin Dashboard Styles */
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            width: 250px;
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .content h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            margin-bottom: 10px;
+        }
+
+        .search-form {
+            margin-bottom: 20px;
+        }
+
+        .search-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .search-form input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+
+        .search-form button {
+            padding: 8px 16px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-form button:hover {
+            background-color: #555;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+
+        /* Delete button styling */
+        .delete-button {
+            background-color: #ff3333;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <h2>Dashboard</h2>
+            <ul>
+                <li><a href="{% url 'rfid_detection' %}">DETECT TAG</a></li>
+                <li><a href="{% url 'view-tag' %}">VIEW TAG</a></li>
+                <li><a href="{% url 'equipment_list' %}">EQUIPMENTS</a></li>
+                <li><a href="{% url 'add-equipment' %}">ADD EQUIPMENTS</a></li>
+                <li><a href="{% url 'borrow_equipment' %}">BORROW</a></li>
+                <li><a href="{% url 'borrowing_list' %}">BORROWED</a></li>
+                <li><a href="{% url 'add_student' %}">ADD STUDENTS</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h2 style="text-align: center;">EQUIPMENT RECORDING SYSTEM USING RFID</h2>
+            <div class="search-form">
+                <label for="search">Search:</label>
+                <input type="text" id="search" name="search">
+                <button onclick="search()">Search</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Registration Number</th>
+                        <th>First Name</th>
+                        <th>Middle Name</th>
+                        <th>Last Name</th>
+                        <th>Course</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.registration_number }}</td>
+                        <td>{{ student.first_name }}</td>
+                        <td>{{ student.middle_name }}</td>
+                        <td>{{ student.last_name }}</td>
+                        <td>{{ student.course }}</td>
+                        <td>
+                            <form action="{% url 'delete_student' student.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete this student?');">
+                                {% csrf_token %}
+                                <button class="delete-button" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function search() {
+            var input = document.getElementById("search").value.toLowerCase();
+            var table = document.getElementsByTagName("table")[0];
+            var rows = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < rows.length; i++) {
+                var registrationNumber = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
+                var firstName = rows[i].getElementsByTagName("td")[1].textContent.toLowerCase();
+                var middleName = rows[i].getElementsByTagName("td")[2].textContent.toLowerCase();
+                var lastName = rows[i].getElementsByTagName("td")[3].textContent.toLowerCase();
+                var course = rows[i].getElementsByTagName("td")[4].textContent.toLowerCase();
+
+                if (registrationNumber.includes(input) || firstName.includes(input) || middleName.includes(input) || lastName.includes(input) || course.includes(input)) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>

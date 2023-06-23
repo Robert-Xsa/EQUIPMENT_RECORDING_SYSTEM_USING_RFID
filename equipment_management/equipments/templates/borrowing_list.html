@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Borrowing List</title>
+    <style>
+        /* Your CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        td:last-child {
+            text-align: center;
+            border-right: none; /* Remove right border for the last column */
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <h1>Borrowing List</h1>
+
+    {% if borrowings %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Equipment</th>
+                    <th>Student</th>
+                    <th>Borrowed Date</th>
+                    <th>Returned Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for borrowing in borrowings %}
+                <tr>
+                    <td>
+                        {% for equipment in borrowing.equipment.all %}
+                            {{ equipment.tag }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ borrowing.student }}</td>
+                    <td>{{ borrowing.borrowed_date|date:'F d, Y H:i' }}</td>
+                    <td>{{ borrowing.returned_date|date:'F d, Y H:i' }}</td>
+                    <td>
+                        {% if not borrowing.returned_date %}
+                            <a href="{% url 'return_equipment' borrowing.id %}">Return</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No borrowings found.</p>
+    {% endif %}
+</body>
+</html>

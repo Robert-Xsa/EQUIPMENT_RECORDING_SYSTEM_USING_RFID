@@ -1,0 +1,80 @@
+<!-- borrow_equipment.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Borrow Equipment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            background-color: #fff;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Borrow Equipment</h1>
+    <form method="POST" action="{% url 'borrow_equipment' %}">
+        {% csrf_token %}
+        <label for="equipment">Select Equipment:</label>
+        <select name="equipment" id="equipment">
+            {% for equipment in equipment %}
+                <option value="{{ equipment.id }}">{{ equipment.tag }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="student">Select Student:</label>
+        <select name="student" id="student">
+            {% for student in students %}
+                <option value="{{ student.id }}">{{ student.registration_number }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit">Borrow Equipment</button>
+    </form>
+</body>
+</html>

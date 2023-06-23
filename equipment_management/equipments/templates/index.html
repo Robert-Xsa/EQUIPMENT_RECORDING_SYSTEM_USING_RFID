@@ -1,0 +1,11 @@
+{% block title %}EQUIPMENTS MANAGEMENTS SYSTEM{% endblock %}
+
+{% block content %}
+    <form method="POST" action="{% url 'attendance' %}">
+        {% csrf_token %}
+        <h1>EQUIPMENTS MANAGEMENT SYSTEM</h1>
+        <input type="text" name="rfid" placeholder="RFID" size="48" value="{{ rfid }}">
+        <!-- Rest of the attendance form -->
+    </form>
+    <!-- Rest of the attendance page content -->
+{% endblock %}

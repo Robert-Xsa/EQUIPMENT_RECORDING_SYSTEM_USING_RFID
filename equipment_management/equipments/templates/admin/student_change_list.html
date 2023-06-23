@@ -1,0 +1,12 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools-items %}
+  {{ block.super }}
+  <li>
+    <form method="post" enctype="multipart/form-data" action="{% url 'student_fill_students_from_excel' %}">
+      {% csrf_token %}
+      <input type="file" name="file">
+      <button type="submit">Fill from Excel</button>
+    </form>
+  </li>
+{% endblock %}
