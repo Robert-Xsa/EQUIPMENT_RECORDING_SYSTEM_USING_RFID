@@ -12,6 +12,7 @@ admin.site.register(Borrowing, BorrowingAdmin)
 admin.site.register(Equipment)
 admin.site.register(RFID)
 admin.site.register(Student)
+admin.site.register(Arduino_COM)
 
 
 

@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404, redirect
 # Create your views here.
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Equipment, Borrowing, RFID
+from .models import Equipment, Borrowing, RFID,Arduino_COM
 import serial
 from .models import Equipment, Student, RFID
 from .forms import EquipmentForm, BorrowingForm, StudentForm
@@ -21,52 +21,12 @@ def admin_dashboard(request):
     context = {'students': students}
     return render(request, 'admin_dashboard.html', context)
 
-
-def detect_rfid(request):
-    rfid_tag = request.GET.get('rfid_tag')
-
-    # Process the RFID tag data
-    # Update the database with borrowing information
-
-    context = {
-        'rfid_tag': rfid_tag
-    }
-
-    return render(request, 'rfid.html', context)
-
-
-def return_equipment(request):
-    # Read the RFID tag data from the request
-    rfid_tag = request.GET.get('rfid_tag')
-
-    # Perform necessary operations with the RFID tag data
-    # Update the database to mark the equipment as returned
-
-    return HttpResponse("Equipment returned and database updated.")
-
-
-
-def attendance(request):
-    if request.method == 'POST':
-        # Process the submitted form data
-        rfid = request.POST.get('rfid')
-
-        # Save the RFID tag to the database using Django APIs
-        RFID.objects.create(tag=rfid)
-
-        # Print the received RFID tag
-        print("Received RFID tag:", rfid)
-
-    return render(request, 'index.html')
-
-
-#New
-
-
 def rfid_detection(request):
     try:
         # Set up the serial connection with the Arduino
-        ser = serial.Serial('COM10', 9600)
+        com = Arduino_COM.objects.latest('id').COM
+        ser = serial.Serial(com, 9600)
+        
 
         # Start listening for data from the Arduino
         while True:
@@ -184,3 +144,5 @@ def delete_rfid(request, rfid_id):
     # Handle other HTTP methods if needed
     # Render a template or return a response for other cases
     return render(request, 'view_tag.html')
+
+

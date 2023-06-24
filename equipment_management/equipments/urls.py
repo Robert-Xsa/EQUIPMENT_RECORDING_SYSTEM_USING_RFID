@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.admin_dashboard, name='admin-dashboard'),
-    path('detect_rfid/', views.detect_rfid, name='detect_rfid'),
+    #path('detect_rfid/', views.detect_rfid, name='detect_rfid'),
     path('return_equipment/', views.return_equipment, name='return_equipment'),
     path('rfid_detection/', views.rfid_detection, name='rfid_detection'),
     path('view-tag/', views.view_tag, name='view-tag'),
@@ -21,6 +21,7 @@ urlpatterns = [
     path('students/<int:student_id>/delete/', views.delete_student, name='delete_student'),
     path('equipment/delete/<int:equipment_id>/', views.delete_equipment, name='delete_equipment'),
     path('delete_rfid/<int:rfid_id>/', views.delete_rfid, name='delete_rfid'),
+
     
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

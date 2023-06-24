@@ -49,3 +49,10 @@ class RFID(models.Model):
 
     def __str__(self):
         return self.tag
+    
+class Arduino_COM(models.Model):
+    COM = models.CharField(max_length=100)
+    time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.COM
