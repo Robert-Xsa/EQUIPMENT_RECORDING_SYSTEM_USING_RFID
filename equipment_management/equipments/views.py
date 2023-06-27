@@ -11,11 +11,44 @@ from datetime import date
 from django.contrib import messages
 import serial
 from serial import SerialException
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
+
+
+
+def user_login(request):
+    message = ''
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('admin-dashboard')
+        else:
+            message = "Invalid username or password."
+    return render(request, 'login.html', {'message': message})
+
+def user_logout(request):
+    logout(request)
+    return redirect('login')
+
+def user_signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})
 
 
 
 
 
+@login_required
 def admin_dashboard(request):
     students = Student.objects.all()
     context = {'students': students}

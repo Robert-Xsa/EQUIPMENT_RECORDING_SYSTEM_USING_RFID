@@ -5,8 +5,10 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('', views.admin_dashboard, name='admin-dashboard'),
-    #path('detect_rfid/', views.detect_rfid, name='detect_rfid'),
+    path('', views.user_login, name='login'),
+    path('logout/', views.user_logout, name='logout'),
+    path('user_signup/', views.user_signup, name='signup'),
+    path('admin-dashboard', views.admin_dashboard, name='admin-dashboard'),
     path('return_equipment/', views.return_equipment, name='return_equipment'),
     path('rfid_detection/', views.rfid_detection, name='rfid_detection'),
     path('view-tag/', views.view_tag, name='view-tag'),
